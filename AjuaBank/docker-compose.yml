@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ajuadmin
+      POSTGRES_PASSWORD: ajuapass
+      POSTGRES_DB: ajuabank
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  apigateway:
+    build: ./src/ApiGateway
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+  authservice:
+    build: ./src/AuthService
+    ports:
+      - "5100:5100"
+    depends_on:
+      - postgres
+  transactionservice:
+    build: ./src/TransactionService
+    ports:
+      - "5200:5200"
+    depends_on:
+      - postgres
+  fraudservice:
+    build: ./src/FraudDetectionService
+    ports:
+      - "5300:5300"
+    depends_on:
+      - postgres
+  blazoradmin:
+    build: ./src/BlazorAdmin
+    ports:
+      - "8080:80"
+    depends_on:
+      - apigateway
+volumes:
+  postgres_data:

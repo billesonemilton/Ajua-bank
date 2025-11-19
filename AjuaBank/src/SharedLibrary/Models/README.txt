@@ -1,0 +1,1 @@
+Shared DTOs, models and interfaces go here.
