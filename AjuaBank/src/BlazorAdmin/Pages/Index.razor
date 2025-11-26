@@ -1,0 +1,202 @@
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+
+@page "/"
+@using BlazorAdmin.Services
+@inject ApiService Api
+
+<PageTitle>Ajua Bank - Dashboard</PageTitle>
+
+@if (!Api.IsAuthenticated)
+{
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>@(isLogin ? "Login" : "Register")</h3>
+                    </div>
+                    <div class="card-body">
+                        <EditForm Model="@this" OnValidSubmit="@HandleAuth">
+                            <div class="mb-3">
+                                <label>Email</label>
+                                <InputText @bind-Value="email" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label>Password</label>
+                                <InputText @bind-Value="password" type="password" class="form-control" />
+                            </div>
+                            @if (!isLogin)
+                            {
+                                <div class="mb-3">
+                                    <label>Full Name</label>
+                                    <InputText @bind-Value="fullName" class="form-control" />
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(errorMessage))
+                            {
+                                <div class="alert alert-danger">@errorMessage</div>
+                            }
+                            <button type="submit" class="btn btn-primary w-100">
+                                @(isLogin ? "Login" : "Register")
+                            </button>
+                        </EditForm>
+                        <div class="mt-3 text-center">
+                            <a href="#" @onclick="@(() => { isLogin = !isLogin; errorMessage = string.Empty; })" @onclick:preventDefault>
+                                @(isLogin ? "Need an account? Register" : "Have an account? Login")
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Ajua Bank Dashboard</h1>
+            <button class="btn btn-danger" @onclick="@(() => Api.Logout())">Logout</button>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Create Transaction</h5>
+                        <select @bind="txType" class="form-select mb-2">
+                            <option value="Deposit">Deposit</option>
+                            <option value="Withdrawal">Withdrawal</option>
+                            <option value="Transfer">Transfer</option>
+                        </select>
+                        <input @bind="txAmount" type="number" class="form-control mb-2" placeholder="Amount" />
+                        @if (txType == "Transfer")
+                        {
+                            <input @bind="txToAccount" class="form-control mb-2" placeholder="To Account" />
+                        }
+                        <input @bind="txDescription" class="form-control mb-2" placeholder="Description" />
+                        <button class="btn btn-success w-100" @onclick="CreateTransaction">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4>Recent Transactions</h4>
+            </div>
+            <div class="card-body">
+                @if (transactions == null)
+                {
+                    <p>Loading...</p>
+                }
+                else if (!transactions.Any())
+                {
+                    <p>No transactions yet.</p>
+                }
+                else
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Fraud Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var tx in transactions)
+                            {
+                                <tr>
+                                    <td>@tx.Timestamp.ToString("g")</td>
+                                    <td>@tx.Type</td>
+                                    <td>$@tx.Amount.ToString("N2")</td>
+                                    <td><span class="badge bg-@GetStatusColor(tx.Status)">@tx.Status</span></td>
+                                    <td>@tx.FraudScore.ToString("F2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool isLogin = true;
+    private string email = "";
+    private string password = "";
+    private string fullName = "";
+    private string errorMessage = "";
+
+    private string txType = "Deposit";
+    private decimal txAmount = 0;
+    private string txToAccount = "";
+    private string txDescription = "";
+
+    private List<TransactionResponse>? transactions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Api.IsAuthenticated)
+        {
+            await LoadTransactions();
+        }
+    }
+
+    private async Task HandleAuth()
+    {
+        bool success;
+        
+        if (isLogin)
+        {
+            success = await Api.LoginAsync(email, password);
+        }
+        else
+        {
+            success = await Api.RegisterAsync(email, password, fullName);
+        }
+
+        if (success)
+        {
+            errorMessage = "";
+            await LoadTransactions();
+        }
+        else
+        {
+            errorMessage = "Authentication failed. Please try again.";
+        }
+    }
+
+    private async Task LoadTransactions()
+    {
+        transactions = await Api.GetTransactionsAsync();
+    }
+
+    private async Task CreateTransaction()
+    {
+        var success = await Api.CreateTransactionAsync(txType, txAmount, txToAccount, txDescription);
+        
+        if (success)
+        {
+            txAmount = 0;
+            txToAccount = "";
+            txDescription = "";
+            await LoadTransactions();
+        }
+    }
+
+    private string GetStatusColor(string status) => status switch
+    {
+        "Completed" => "success",
+        "Pending" => "warning",
+        "Flagged" => "danger",
+        _ => "secondary"
+    };
+}

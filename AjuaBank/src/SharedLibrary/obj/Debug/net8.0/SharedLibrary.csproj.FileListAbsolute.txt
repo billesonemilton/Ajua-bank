@@ -1,0 +1,13 @@
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/bin/Debug/net8.0/SharedLibrary.deps.json
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/bin/Debug/net8.0/SharedLibrary.dll
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/bin/Debug/net8.0/SharedLibrary.pdb
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/obj/Debug/net8.0/SharedLibrary.csproj.AssemblyReference.cache
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/obj/Debug/net8.0/SharedLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/obj/Debug/net8.0/SharedLibrary.AssemblyInfoInputs.cache
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/obj/Debug/net8.0/SharedLibrary.AssemblyInfo.cs
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/obj/Debug/net8.0/SharedLibrary.csproj.CoreCompileInputs.cache
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/obj/Debug/net8.0/SharedLibrary.sourcelink.json
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/obj/Debug/net8.0/SharedLibrary.dll
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/obj/Debug/net8.0/refint/SharedLibrary.dll
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/obj/Debug/net8.0/SharedLibrary.pdb
+/home/ghost/Downloads/ajua_bank_scaffold/AjuaBank/src/SharedLibrary/obj/Debug/net8.0/ref/SharedLibrary.dll
