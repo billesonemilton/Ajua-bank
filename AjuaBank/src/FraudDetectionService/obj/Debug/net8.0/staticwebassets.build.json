@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "WiIMFrydS+9HaM1uZ7TXtq+3DiLlXUvTO5ykvS5wDVI=",
+  "Source": "FraudDetectionService",
+  "BasePath": "_content/FraudDetectionService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
